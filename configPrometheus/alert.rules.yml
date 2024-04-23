@@ -1,0 +1,41 @@
+groups:
+- name: docker-containers
+  rules:
+      - alert: highCPUUsage
+        expr: (sum(rate(container_cpu_usage_seconds_total{name=~".+"}[1m])) / sum(container_spec_cpu_quota{name=~".+"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage on {{ $labels.name }} is above 90% for the last 5 minutes."
+
+      - alert: memoryExhaustion
+        expr: (sum(container_memory_working_set_bytes{name=~".+"}) / sum(container_spec_memory_limit_bytes{name=~".+"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Memory exhaustion detected"
+          description: "Memory usage on {{ $labels.name }} is above 90% for the last 5 minutes."
+      
+      - alert: swapExhaustion
+        expr: (sum(container_memory_swap_bytes{name=~".+"}) / sum(container_spec_memory_limit_bytes{name=~".+"})) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Swap exhaustion detected"
+          description: "Swap usage on {{ $labels.name }} is above 90% for the last 5 minutes."
+      
+      - alert: diskSpaceUsageHigh
+        expr: (node_filesystem_free_bytes / node_filesystem_size_bytes) * 100 == 00
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk space usage high"
+          description: "Disk space usage on {{ $labels.mountpoint }} is below 10% for the last 5 minutes."
+
+
+

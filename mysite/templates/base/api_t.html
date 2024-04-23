@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<!--<link rel="stylesheet" href="static/base.css">-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../static/base.css">
+
+<!-- href="static/base.css"/>-->
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<!--<meta http-equiv="refresh" content="5">-->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    
+</div>
+</div>
+</main>
+<script>
+    window.onload = function() {
+        hostname = localStorage.getItem('hostname')
+        window.location.href = "{% url 'api' %}?hostname=" + hostname + '&code=' + '{{code}}';
+    }
+</script>
+</body>
+</html>

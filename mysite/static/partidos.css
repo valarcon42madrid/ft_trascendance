@@ -1,0 +1,27 @@
+body {
+  font-family: 'Roboto Condensed';
+  font-size: 80%;
+}
+th {
+  background-color: #ddeeff;
+  font-weight: normal;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 4px;
+  margin: 2px;
+}
+
+.thead-dark th{
+  font-family: "Roboto Condensed", sans-serif;
+  background-color: #2a2a2a !important;
+  color:#ffc107 !important;
+}
+
+h1 {
+  color: #ffc107 !important;/* Color azul oscuro, cambia esto por el color que prefieras */
+  font-family: 'Roboto Condensed', sans-serif !important; /* Asegúrate de que la fuente esté importada o disponible */
+  background-color: #2a2a2a ;
+  display: inline-block;
+}

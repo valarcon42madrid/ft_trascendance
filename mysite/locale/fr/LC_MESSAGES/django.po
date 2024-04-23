@@ -1,0 +1,360 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-21 17:01+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: base/forms.py:21
+msgid "User name"
+msgstr "Nom d'utilisateur"
+
+#: base/forms.py:22 templates/base/login_t.html:29
+#: templates/base/signup_t.html:22
+msgid "Password"
+msgstr "Mot de passe"
+
+#: mysite/settings.py:141 singlepage/templates/singlepage/index.html:91
+msgid "English"
+msgstr "Anglaise"
+
+#: mysite/settings.py:142
+msgid "Spanish"
+msgstr "Espagnole"
+
+#: mysite/settings.py:143
+msgid "French"
+msgstr "Français"
+
+#: partidos/views.py:463
+msgid "Waiting player 2"
+msgstr "En attente du joueur 2"
+
+#: partidos/views.py:499
+msgid "Playing"
+msgstr "Jouant"
+
+#: partidos/views.py:503
+msgid "Match over"
+msgstr "Match terminé"
+
+#: singlepage/templates/singlepage/index.html:94
+msgid "Español"
+msgstr "Espagnole"
+
+#: singlepage/templates/singlepage/index.html:97
+msgid "Français"
+msgstr "Français"
+
+#: singlepage/templates/singlepage/index.html:160
+msgid "Error loading updated content "
+msgstr "Erreur lors du chargement du contenu "
+
+#: singlepage/templates/singlepage/index.html:174
+#: templates/base/login_t.html:20 templates/base/login_t.html:21
+#: templates/base/login_t.html:35
+msgid "Login"
+msgstr "Se connecter"
+
+#: singlepage/templates/singlepage/index.html:175
+#: templates/base/signup_t.html:13
+msgid "Signup"
+msgstr "S'inscrire"
+
+#: singlepage/templates/singlepage/index.html:184
+msgid "Wrong data "
+msgstr "Données erronées "
+
+#: singlepage/templates/singlepage/index.html:202
+#: templates/torneos/torneos_inscripcion_t.html:19
+msgid "User"
+msgstr "Utilisateur"
+
+#: singlepage/templates/singlepage/index.html:205
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: singlepage/templates/singlepage/index.html:210
+msgid "Show 2FA QR"
+msgstr "Afficher le 2FA QR"
+
+#: singlepage/templates/singlepage/index.html:215
+msgid "Quick match"
+msgstr "Match rapide"
+
+#: singlepage/templates/singlepage/index.html:220
+msgid "Play"
+msgstr "Jouer"
+
+#: singlepage/templates/singlepage/index.html:225
+#: templates/partidos/partidos_mlist_t.html:13
+msgid "List of my matches"
+msgstr "Liste de mes matchs"
+
+#: singlepage/templates/singlepage/index.html:230
+#: templates/partidos/partidos_list_t.html:15
+msgid "List of matches"
+msgstr "Liste des matchs"
+
+#: singlepage/templates/singlepage/index.html:239
+msgid "Tournaments"
+msgstr "Tournois"
+
+#: singlepage/templates/singlepage/index.html:244
+#: templates/torneos/torneos_inscripcion_t.html:17
+msgid "Tournament registration"
+msgstr "Inscription au tournoi"
+
+#: singlepage/templates/singlepage/index.html:249
+#: templates/torneos/torneos_info_t.html:13
+msgid "Tournament information"
+msgstr "Informations sur les tournois"
+
+#: singlepage/templates/singlepage/index.html:255
+msgid "Tournament play"
+msgstr "Jouer à un tournoi"
+
+#: singlepage/templates/singlepage/index.html:262
+#: templates/torneos/torneos_admin_t.html:20
+#: templates/torneos/torneos_edit_t.html:38
+msgid "Tournament administration"
+msgstr "Administration du tournoi"
+
+#: singlepage/templates/singlepage/index.html:269
+msgid "Upcoming tournaments"
+msgstr "Tournois à venir"
+
+#: singlepage/templates/singlepage/index.html:315
+msgid "Sesion expired. Please log in again "
+msgstr "Séance expirée. Veuillez vous reconnecter "
+
+#: singlepage/templates/singlepage/index.html:788
+#: templates/torneos/torneos_inscripcion_t.html:100
+msgid "Alias eliminated "
+msgstr "Alias éliminé "
+
+#: singlepage/templates/singlepage/index.html:791
+#: templates/torneos/torneos_inscripcion_t.html:103
+msgid "Updated alias: "
+msgstr "Alias mis à jour: "
+
+#: singlepage/templates/singlepage/index.html:795
+#: templates/torneos/torneos_inscripcion_t.html:107
+msgid "Alias not valid "
+msgstr "Alias non valide "
+
+#: singlepage/templates/singlepage/index.html:799
+#: templates/torneos/torneos_inscripcion_t.html:111
+msgid "Error updating alias "
+msgstr "Erreur lors de la mise à jour de l'alias "
+
+#: singlepage/templates/singlepage/index.html:894
+#: templates/base/login_t.html:55 templates/base/signup_t.html:65
+#: templates/base/signup_t.html:98 templates/torneos/torneos_edit_t.html:52
+msgid "An error occurred while processing the form.  "
+msgstr "Une erreur s'est produite lors du traitement du formulaire. "
+
+#: singlepage/templates/singlepage/index.html:906
+#: templates/base/signup_t.html:78 templates/torneos/torneos_edit_t.html:64
+msgid "The request failed with an error "
+msgstr "La demande a échoué avec une erreur "
+
+#: templates/base/google_t.html:27 templates/partidos/pantallaPong_t.html:462
+#: templates/partidos/partidos_list_t.html:46
+#: templates/partidos/partidos_mlist_t.html:47
+#: templates/torneos/torneos_admin_t.html:68
+#: templates/torneos/torneos_info_t.html:63
+#: templates/torneos/torneos_inscripcion_t.html:135
+msgid "Home"
+msgstr "Maison"
+
+#: templates/base/login_t.html:20 templates/base/signup_t.html:12
+msgid "Welcome!"
+msgstr "Bienvenu!"
+
+#: templates/base/login_t.html:25 templates/base/signup_t.html:18
+#| msgid "User name"
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: templates/base/login_t.html:40 templates/base/signup_t.html:37
+msgid "Clear"
+msgstr "Effacer"
+
+#: templates/base/login_t.html:68
+msgid "Log in error or wrong password "
+msgstr "Erreur de connexion ou mot de passe erroné "
+
+#: templates/base/login_t.html:81
+#| msgid "I haven't signedup yet"
+msgid "I haven't signed up yet"
+msgstr "Je ne suis pas encore inscrit"
+
+#: templates/base/signup_t.html:26
+#| msgid "Password"
+msgid "Confirm Password"
+msgstr "Mot de passe"
+
+#: templates/base/signup_t.html:32
+msgid "Register"
+msgstr "Registre"
+
+#: templates/base/signup_t.html:47
+#| msgid "I have already signedup"
+msgid "I have already signed up"
+msgstr "Je suis déjà inscrit"
+
+#: templates/partidos/partidos_list_t.html:21
+#: templates/partidos/partidos_mlist_t.html:22
+msgid "Player 1"
+msgstr "Joueur 1"
+
+#: templates/partidos/partidos_list_t.html:22
+#: templates/partidos/partidos_mlist_t.html:23
+msgid "Score player 1"
+msgstr "Ponctuation joueur 1"
+
+#: templates/partidos/partidos_list_t.html:23
+#: templates/partidos/partidos_mlist_t.html:24
+msgid "Player 2"
+msgstr "Joueur 2"
+
+#: templates/partidos/partidos_list_t.html:24
+#: templates/partidos/partidos_mlist_t.html:25
+msgid "Score player 2"
+msgstr "Ponctuation joueur 2"
+
+#: templates/partidos/partidos_list_t.html:25
+#: templates/partidos/partidos_mlist_t.html:26
+msgid "Beginning"
+msgstr "Début"
+
+#: templates/partidos/partidos_list_t.html:26
+#: templates/partidos/partidos_mlist_t.html:27
+msgid "Ending"
+msgstr "Fin"
+
+#: templates/partidos/partidos_list_t.html:27
+#: templates/partidos/partidos_mlist_t.html:28
+msgid "Duration"
+msgstr "Durée"
+
+#: templates/torneos/torneos_admin_t.html:23
+msgid "New"
+msgstr "Nouveau"
+
+#: templates/torneos/torneos_admin_t.html:32
+msgid "ID"
+msgstr "ID"
+
+#: templates/torneos/torneos_admin_t.html:33
+#: templates/torneos/torneos_info_t.html:22
+#: templates/torneos/torneos_inscripcion_t.html:43 torneos/forms.py:13
+msgid "Tournament name"
+msgstr "Nom du tournoi"
+
+#: templates/torneos/torneos_admin_t.html:34
+#: templates/torneos/torneos_info_t.html:23
+#: templates/torneos/torneos_inscripcion_t.html:44 torneos/forms.py:17
+msgid "Start of registration"
+msgstr "Début des inscriptions"
+
+#: templates/torneos/torneos_admin_t.html:35
+#: templates/torneos/torneos_info_t.html:24
+#: templates/torneos/torneos_inscripcion_t.html:45 torneos/forms.py:21
+msgid "End of registration"
+msgstr "Fin de l'inscription"
+
+#: templates/torneos/torneos_admin_t.html:36
+#: templates/torneos/torneos_info_t.html:25
+#: templates/torneos/torneos_inscripcion_t.html:46 torneos/forms.py:25
+msgid "Start of matches"
+msgstr "Début des matchs"
+
+#: templates/torneos/torneos_admin_t.html:37
+#: templates/torneos/torneos_info_t.html:26
+#: templates/torneos/torneos_inscripcion_t.html:47 torneos/forms.py:29
+msgid "Maximum match duration in minutes"
+msgstr "Durée maximale des matchs en minutes"
+
+#: templates/torneos/torneos_admin_t.html:38
+#: templates/torneos/torneos_info_t.html:27
+#: templates/torneos/torneos_inscripcion_t.html:48 torneos/forms.py:33
+msgid "Minutes between matches"
+msgstr "Minutes entre les matchs"
+
+#: templates/torneos/torneos_admin_t.html:39
+msgid "Settings"
+msgstr "Paramètres"
+
+#: templates/torneos/torneos_edit_t.html:25
+msgid "Edit tournement"
+msgstr "Modifier le tournoi"
+
+#: templates/torneos/torneos_edit_t.html:37
+msgid "Save"
+msgstr "Sauvegarder"
+
+#: templates/torneos/torneos_info_t.html:21
+msgid "Phase"
+msgstr "Phase"
+
+#: templates/torneos/torneos_info_t.html:42
+#: templates/torneos/torneos_inscripcion_t.html:65
+msgid "Players registered"
+msgstr "Joueurs inscrits"
+
+#: templates/torneos/torneos_info_t.html:54
+msgid "Matches"
+msgstr "Matchs"
+
+#: templates/torneos/torneos_inscripcion_t.html:23
+msgid "New Alias:"
+msgstr "Nouveau alias: "
+
+#: templates/torneos/torneos_inscripcion_t.html:26
+msgid "Update Alias"
+msgstr "Mettre à jour l'alias"
+
+#~ msgid "Pong game"
+#~ msgstr "Jeu de pong"
+
+#~ msgid "back to home"
+#~ msgstr "de retour à la maison"
+
+#~ msgid "Match duration limit"
+#~ msgstr "Limite de durée des matchs"
+
+#~ msgid "Match point limit"
+#~ msgstr "Limite de points de match"
+
+#~ msgid "Edit"
+#~ msgstr "Modifier"
+
+#~ msgid "Delete"
+#~ msgstr "Supprimer"
+
+#~ msgid "Matches and results"
+#~ msgstr "Matchs et résultats"
+
+#~ msgid "Winners"
+#~ msgstr "Gagnants"
+
+#~ msgid "Registration/Cancel"
+#~ msgstr "Inscription/Annulation"
+
+#~ msgid "Players"
+#~ msgstr "Joueurs"

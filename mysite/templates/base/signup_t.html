@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="static/base.css"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>{% trans "Welcome!" %}</h1>
+<h1>{% trans "Signup" %}</h1>
+
+<form id="miFormulario">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="username" class="form-label">{% trans "Username" %}</label>
+        <input type="text" class="form-control" id="username" name="username">
+    </div>
+    <div class="mb-3">
+        <label for="password1" class="form-label">{% trans "Password" %}</label>
+        <input type="password" class="form-control" id="password1" name="password1">
+    </div>
+    <div class="mb-3">
+        <label for="password2" class="form-label">{% trans "Confirm Password" %}</label>
+        <input type="password" class="form-control" id="password2" name="password2">
+    </div>
+    <div class="button-group">
+        <p>
+            <button type="submit" class="btn btn-primary links">
+                <i class="bi bi-person-plus"></i> {% trans "Register" %}
+            </button>
+        </p>
+        <p>
+            <button type="reset" class="btn btn-primary links">
+                <i class="bi bi-x-circle"></i> {% trans "Clear" %}
+            </button>
+        </p>
+    </div>
+    <div id="contenido-dinamico">
+            
+    </div>
+    <div id="contenido-a-eliminar2">
+        <p>
+            <a href="#" onclick="mostrarLogin()" class="btn btn-primary links">
+                <i class="bi bi-box-arrow-in-right"></i> {% trans "I have already signed up" %}
+            </a>
+        </p>
+    </div>
+</form>
+
+<div id="mensajeError" style="color: red;"></div>
+
+<script>
+    $(document).ready(function() {
+    $('#miFormulario').submit(function(event) {
+        event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
+        var formData = $(this).serialize(); // Serializar los datos del formulario
+        $.post("{% url 'signup' %}", formData)
+            .done(function(response) {
+                // Manejar la respuesta exitosa
+                if (response.error) {
+                    // Si hay un error, muestra un mensaje de error en algún lugar del HTML
+                    $('#mensajeError').text("{% trans 'An error occurred while processing the form.  ' %}");
+                } else if (response.redirect_url) {
+                    // Si hay una URL de redirección, redirige a esa URL
+                    window.location.href = response.redirect_url;
+                } else {
+                    // Manejar otro tipo de respuesta, si es necesario
+                    console.log(response);
+                }
+            })
+            .fail(function(xhr, errmsg, err) {
+                // Manejar el fallo de la solicitud
+                var errorMessage = obtenerMensajeError(xhr.responseText); // Obtener el mensaje de error relevante
+                $('#mensajeError').text(errorMessage); // Mostrar el mensaje de error al usuario
+                console.error("{% trans 'The request failed with an error ' %}" + xhr.status + ': ' + errorMessage);
+            });
+    });
+});
+
+function obtenerMensajeError(responseText) {
+    try {
+        const jsonResponse = JSON.parse(responseText);
+        // Verifica si la respuesta contiene la clave "errors"
+        if (jsonResponse && jsonResponse.errors) {
+            const errorMessages = Object.values(JSON.parse(jsonResponse.errors))
+                                    .flatMap(fieldErrors => fieldErrors.map(error => error.message));
+            // Devuelve solo el último mensaje de error
+            return errorMessages[errorMessages.length - 1];
+        }
+    } catch (error) {
+        // Si no se puede analizar la respuesta como JSON, o no contiene la estructura esperada, devuelve la respuesta completa
+        return responseText;
+    }
+    // Si no se encontraron mensajes de error, devuelve un mensaje genérico
+    return "{% trans 'An error occurred while processing the form.  ' %}";
+}
+</script>
+<script>
+    function mostrarLogin() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'login' %}", function(data) {
+                
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar2").hide();
+            });
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    {% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="static/torneos.css"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>{% trans "Tournament information" %}</h1>
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            {% for torneo in torneos %}
+            <thead class="thead-dark">
+                <tr>
+                    <!--<th rowspan='3'>{% trans "Phase" %}</th>-->
+                    <th>{% trans "Tournament name" %}</th>
+                    <th>{% trans "Start of registration" %}</th>
+                    <th>{% trans "End of registration" %}</th>
+                    <th>{% trans "Start of matches" %}</th>
+                    <th>{% trans "Maximum match duration in minutes" %}</th>
+                    <th>{% trans "Minutes between matches" %}</th>
+                </tr>
+            </thead>
+            <thead class="thead-dark">
+                <tr>
+                    <td>{{ torneo.copy.nombre }}</td>
+                    <td>{{ torneo.copy.comienzo_inscripcion }}</td>
+                    <td>{{ torneo.copy.fin_inscripcion }}</td>
+                    <td>{{ torneo.copy.comienzo_partidos }}</td>
+                    <td>{{ torneo.copy.minutos_duracion_maxima_partidos }}</td>
+                    <td>{{ torneo.copy.minutos_entre_partidos }}</td>
+                </tr>
+            </thead>
+            <thead class="thead-dark">
+                <tr>
+                    <th>{% trans "Players registered" %}</th>
+                    <td colspan='5'>
+                        {% for jugador in torneo.jugadores %}
+                            {{ jugador.alias|default:jugador.username }}
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            </thead>
+            {% for faseTorneo in torneo.fases %}
+            <tr>
+                <td rowspan='2' valign='top'>{{ faseTorneo.fase }}</td>
+                <th>{% trans "Matches" %}</th>
+                <td colspan='5'>{{ faseTorneo.lista_partidos_resultados_alias }}</td>
+            </tr>
+            {% endfor %}        
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<a href="{% url 'home' %}" class="btn btn-primary links" onclick="pushStateFunction()">{% trans "Home" %}</a>
+
+</body>
+</html>

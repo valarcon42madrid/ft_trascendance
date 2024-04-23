@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    {% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="static/torneos.css"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div id="contenido-dinamico">
+            
+    </div>
+    <div id="contenido-a-eliminar6">
+<h1>{% trans "Tournament registration" %}</h1>
+
+<p>{% trans "User" %}: {{ request.user.username }}</p>
+
+<form id="alias-form" method="post" action="{% url 'update_alias' %}">
+    {% csrf_token %}
+    <label for="alias">{% trans "New Alias:" %}</label>
+    <input type="text" id="alias" name="alias">
+    <button type="submit" class="btn btn-primary links" data-url="{% url 'update_alias' %}">
+        <i class="bi bi-arrow-clockwise"></i> {% trans "Update Alias" %}
+    </button>
+</form>
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>{% trans "Tournament name" %}</th>
+                        <th>{% trans "Start of registration" %}</th>
+                        <th>{% trans "End of registration" %}</th>
+                        <th>{% trans "Start of matches" %}</th>
+                        <th>{% trans "Maximum match duration in minutes" %}</th>
+                        <th>{% trans "Minutes between matches" %}</th>
+                    </tr>
+                </thead>
+                {% for torneo, data_torneo in torneos_con_alias.items %}
+    <thead class="thead-dark">
+        <tr>
+            <td><button class="edit-torneo-btn2 btn btn-primary links" data-torneo-id="{{ data_torneo.copy.id }}" data-user-id="{{ user.id }}"><i class="bi bi-person-plus"></i></button></td>
+            <td>{{ data_torneo.copy.nombre }}</td>
+            <td>{{ data_torneo.copy.comienzo_inscripcion }}</td>
+            <td>{{ data_torneo.copy.fin_inscripcion }}</td>
+            <td>{{ data_torneo.copy.comienzo_partidos }}</td>
+            <td>{{ data_torneo.copy.minutos_duracion_maxima_partidos }}</td>
+            <td>{{ data_torneo.copy.minutos_entre_partidos }}</td>
+        </tr>
+    </thead>
+    <thead class="thead-dark">
+        <tr>
+            <th>{% trans "Players registered" %}</th>
+            <td colspan='6'>
+                {% for alias_jugador in data_torneo.alias_jugadores %}
+                    {{ alias_jugador }}
+                    {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+    </thead>
+{% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var done = 0;
+    $(document).ready(function() {
+        $("#alias-form").on("submit", function(e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+            var url = $(this).find("[data-url]").data("url");
+
+            $.ajax({
+    type: "POST",
+    url: url,
+    data: formData,
+    success: function(data) {
+        if (data.success) {
+            // Update alias on the page (if new_alias is returned)
+            if (data.new_alias) {
+                $("#alias").val(data.new_alias);
+            }
+            // Show success message
+            if (data.new_alias == "") {
+                alert("{% trans 'Alias eliminated ' %}");
+            }
+            else {
+                alert("{% trans 'Updated alias: ' %}" + data.new_alias);
+            }  
+        } else {
+            // Show error message
+            alert("{% trans 'Alias not valid ' %}");
+        }
+    },
+    error: function(xhr, status, error) {
+        alert("{% trans 'Error updating alias ' %}");
+    }
+});
+        });
+    });
+    // $(document).on("click", ".edit-torneo-btn2", function() {
+    //         var torneoId = $(this).data("torneo-id");
+    //         var user = $(this).data("user-id");
+    //         if (done == 0)
+    //             editT2(torneoId, user);
+    //             done = 1;
+    //     });
+
+    //     function editT2(torneoId, user) {
+    //         $.ajax({
+    //             url: "{% url 'torneos_inscripcion' %}?idTorneo=" + torneoId + '&idUser=' + user,
+    //             method: "GET",
+    //             success: function(data) {
+    //                 $("#contenido-dinamico").html(data.form_html);
+    //                 $("#contenido-a-eliminar4").hide();
+    //             }
+    //         });
+    //     }
+</script>
+<a href="{% url 'home' %}" class="btn btn-primary links" onclick="pushStateFunction()">{% trans "Home" %}</a>
+
+</body>
+</html>

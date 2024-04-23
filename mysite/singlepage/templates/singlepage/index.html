@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html>
+    {% load i18n %}
+<head>
+    <title>Trascendance</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/pantallaPong.css"/>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <link rel="stylesheet" href="../../static/base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {% if username2 %}
+    <script>
+        localStorage.setItem('username2', '{{username2}}');
+    </script>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <script>
+        // Funciones de manejo de estado
+        function guardarEstado() {
+            const contenidoDinamico = document.getElementById('contenido-dinamico').innerHTML; // Asegúrate que este ID corresponde al contenedor de tu contenido dinámico
+            const estado = {
+                html: contenidoDinamico,
+                url: window.location.href, // Puedes guardar también la URL si afecta al contenido dinámico
+                scrollPosition: window.scrollY
+            };
+            localStorage.setItem('miEstado', JSON.stringify(estado));
+        }
+
+        function recuperarYRestaurarEstado() {
+            const estadoGuardado = JSON.parse(localStorage.getItem('miEstado'));
+            var url = localStorage.getItem("number");
+            if (estadoGuardado) {
+                if (estadoGuardado.html) {
+                    document.getElementById('contenido-dinamico').innerHTML = estadoGuardado.html; // Restaura el contenido HTML guardado
+                    if (estadoGuardado.html.startsWith("<!-- mostrarPartido2() -->")) {
+                        if (estadoGuardado.html.includes("limiteDuracionPartido = \"\";")) {
+                            if (url == '6')
+                            {
+                                mostrarPartido2();
+                            }
+                            else {
+                                renderView('home');
+                            }
+                        }
+                        else {
+                            if (url == '11')
+                            {
+                                mostrarPT2();
+                            }
+                            else {
+                                renderView('home');
+                            }
+                        }
+                    }
+                window.scrollTo(0, estadoGuardado.scrollPosition); // Restaura la posición de scroll
+            }
+        }
+}
+        document.addEventListener('DOMContentLoaded', function() {
+            recuperarYRestaurarEstado();
+        });
+
+        window.onbeforeunload = guardarEstado;
+    </script>
+    {% endif %}
+    <style>
+        /* Estilos adicionales si es necesario */
+    </style>
+{% load static %}
+</head>
+<body>
+    <script>
+        document.addEventListener('touchmove', function(e) {
+          e.preventDefault();
+        }, { passive: false });
+      </script>
+      
+    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container justify-content-center"> <!-- Añadir la clase justify-content-center -->
+            <a href="{% url 'home' %}" class="btn btn-primary links" onclick="pushStateFunction()">Trascendance</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'en' %}">{% trans "English" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'es' %}">{% trans "Español" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'fr' %}">{% trans "Français" %}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <script>
+        $(document).ready(function() {
+            $('a[href^="#"]').on('click', function(event) {
+                event.preventDefault(); // Previene la acción por defecto del enlace
+                var hrefValue = $(this).attr('href');
+                var number = hrefValue.substring(1); // Elimina el signo de numeral para obtener el número
+                localStorage.setItem('number', number);
+                // Aquí puedes llamar a tu función y pasar el número si es necesario // Ejemplo de función siendo llamada con el número
+            });
+        });
+        $(document).ready(function() {
+            // Intercepta los clics en los enlaces de cambio de idioma
+            $('.nav-link').on('click', function(e) {
+                e.preventDefault();  // Evita que el navegador siga el enlace de forma predeterminada
+                var languageUrl = $(this).attr('href');  // Captura la URL del enlace, que debería ser algo como '/change_en/', '/change_es/', etc.
+                
+                // Envía una solicitud AJAX al servidor para cambiar el idioma
+                $.get(languageUrl, function() {
+                    // Una vez que el idioma ha sido cambiado, recarga el contenido dinámico
+                    number = localStorage.getItem('number');
+                    if (number)
+                        updateDynamicContent(number);
+                });
+                $.get(languageUrl, function() {
+                    setTimeout(() => {
+                    location.reload();
+                    }, 100);
+                      // Recarga la página después de cambiar el idioma
+                });
+            });
+        });
+        function updateDynamicContent(url2) {
+            // Aquí, vuelve a cargar el contenido que depende del idioma
+            // Por ejemplo, puedes hacer una llamada AJAX a una vista que devuelva el contenido actualizado
+            if (url2 == '5')
+                url3 = "check";
+            else if (url2 == '6')
+                url3 = "arranque_rapido";
+            else if (url2 == '7')
+                url3 = "partidos_mlist";
+            else if (url2 == '8')
+                url3 = "partidos_list";
+            else if (url2 == '9')
+                url3 = "torneos_inscripcion_list";
+            else if (url2 == '10')
+                url3 = "torneos_info_list";
+            else if (url2 == '11')
+                url3 = "arranque_torneo";
+            else if (url2 == '12')
+                url3 = "torneos_admin";
+            $.ajax({
+                url: url3,  // Asegúrate de que esta URL es correcta y que la vista devuelve contenido basado en el idioma actual
+                type: 'GET',
+                success: function(response) {
+                    $('#contenido-dinamico').html(response);
+                },
+                error: function() {
+                    console.error("{% trans 'Error loading updated content ' %}");
+                }
+            });
+        }
+    </script>
+        <!-- Contenido principal -->
+        <div id="content" class="mt-3">
+            <!-- Contenido cargado desde el servidor se inserta aquí por JavaScript -->
+        </div>
+        <div id="contenido-dinamico">
+        </div>
+        {% if not form %}
+        {% if not request.user.is_authenticated %}
+        <div id="contenido-a-eliminar">
+            <p><a href="#1" onclick="mostrarLogin()" class="btn btn-primary links"><i class="bi bi-person"></i> {% trans "Login" %}</a></p>
+            <p><a href="#2" onclick="mostrarSignup()" class="btn btn-primary links"><i class="bi bi-person-plus"></i> {% trans "Signup" %}</a></p>
+            <p><a href="#3" onclick="mostrarSignup42()"><img src="../../static/42login.png" class="link42"></a></p>
+
+            <!-- <p><a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-22fb4fcdf0439caa173afadfabf30acd4f9721420251db03960f190416055657&redirect_uri=https%3A%2F%2F10.12.17.1%2Fapi&response_type=code"><img src="../../static/42login.png" class="link42"></a></p> -->
+        </div>
+        {%endif%}
+        {%endif%}
+        {% if error %}
+            <script>
+                window.alert("{% trans 'Wrong data ' %}");
+                setTimeout(showMessage, 2000);
+                window.location.href = "{% url 'index' %}";
+            </script>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <div id="home" class="page">
+            <div class="container">
+                <script>
+                    usename = localStorage.getItem('username2');
+                    if (usename) {
+                        window.onload = function() {
+                            $("#contenido-a-eliminar").hide();
+                        };
+                        localStorage.removeItem('username2');
+                    }
+                </script>
+                <div id="contenido-a-eliminar3">
+                    <p>{% trans "User" %}: {{ request.user.username }}</p>
+                    <p>
+                        <a href="#4" onclick="mostrarLogout()" class="btn btn-primary links">
+                            <i class="bi bi-box-arrow-left"></i> {% trans "Logout" %}
+                        </a>
+                    </p>
+                    <p>
+                        <a href="#5" onclick="mostrarQR()" class="btn btn-primary links">
+                            <i class="bi bi-qr-code"></i> {% trans "Show 2FA QR" %}
+                        </a>
+                    </p>
+                    <table class="table table-hover" style='width: 250px;'>
+                        <thead class="thead-dark">
+                            <tr><th>{% trans "Quick match" %}</th></tr>
+                            <tr>
+                            <td>
+                                <p>
+                                    <a href="#6" onclick="mostrarPartido()" class="btn btn-primary links">
+                                        <i class="bi bi-joystick"></i> {% trans "Play" %}
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="#7" onclick="mostrarMLista()" class="btn btn-primary links">
+                                        <i class="bi bi-list-ul"></i> {% trans "List of my matches" %}
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="#8" onclick="mostrarLista()" class="btn btn-primary links">
+                                        <i class="bi bi-list-ul"></i> {% trans "List of matches" %}
+                                    </a>
+                                </p>
+                            </td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table class="table table-hover" style='width: 250px;'>
+                        <thead class="thead-dark">
+                        <tr><th>{% trans "Tournaments" %}</th></tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    <a href="#9" onclick="mostrarInsLista()" class="btn btn-primary links">
+                                        <i class="bi bi-person-plus"></i> {% trans "Tournament registration" %}
+                                    </a>
+                                </p>
+                                <p>
+                                    <a href="#10" onclick="mostrarInfLista()" class="btn btn-primary links">
+                                        <i class="bi bi-info-circle"></i> {% trans "Tournament information" %}
+                                    </a>
+                                </p>
+                                {% if jugar %}
+                                <p>
+                                    <a href="#11" onclick="mostrarPT()" class="btn btn-primary links">
+                                        <i class="bi bi-play-circle-fill"></i> {% trans "Tournament play" %}
+                                    </a>
+                                </p>
+                                {% endif %}
+                                {% if request.user.is_superuser or request.user.is_staff %}
+                                <p>
+                                    <a href="#12" onclick="mostrarTA()" class="btn btn-primary links">
+                                        <i class="bi bi-tools"></i> {% trans "Tournament administration" %}
+                                    </a>
+                                </p>
+                                {% endif %}
+                                {% if hayProximosTorneos %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="card-title">{% trans "Upcoming tournaments" %}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            {% for t_torneo in proximosTorneos %}
+                                                <li class="list-group-item list-group-item-action">{{ t_torneo }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </thead>
+                    </table>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                </div>
+                <script>
+                    function limpiarDatosDeSesion() {
+                        localStorage.clear();  // Elimina todos los datos de localStorage
+                        sessionStorage.clear();  // Elimina todos los datos de sessionStorage
+                        // Aquí puedes añadir más limpieza si usas otros métodos de almacenamiento
+                    }
+                    function mostrarLogout() {
+                        limpiarDatosDeSesion();
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'logout' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            window.location.href = "{% url 'index' %}";
+                            //$("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                            history.pushState({ view: "Logout" }, null, "/");
+                        });
+                    }
+                    function mostrarQR() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'check' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            //window.location.href = "{% url 'index' %}";
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                            history.pushState({ view: "check" }, null, "/");
+                        }).fail(function(xhr) {
+                            // Maneja los errores, como el token expirado
+                            if (xhr.status === 400) {
+                                // Token expirado o cualquier otro error de cliente
+                                alert("{% trans 'Sesion expired. Please log in again ' %}");
+                                // Redirigir al usuario a la página de inicio de sesión o manejar como se desee
+                            }
+                        });
+                    }
+                    function mostrarPartido() {
+                        let url = localStorage.getItem('number');
+                        if (url != '6')
+                        {
+                            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                            $.get("{% url 'arranque_rapido' %}", function(data) {
+                                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                                $("#contenido-dinamico").html(data);
+                                $("#contenido-a-eliminar").hide();
+                                history.pushState({ view: "partido" }, null, "/");
+                            });
+                        }
+                        
+                    }
+                    function mostrarMLista() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'partidos_mlist' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                            history.pushState({ view: "partidos_mlist" }, null, "/");
+                        });
+                    }
+                    function mostrarLista() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'partidos_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+			                history.pushState({ view: "partidos_list" }, null, "/");
+                        });
+                    }
+                    function mostrarInsLista() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_inscripcion_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                            history.pushState({ view: "torneos_inscripcion_list" }, null, "/");
+                        });
+                    }
+                    function mostrarInfLista() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_info_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                     
+                            history.pushState({ view: "torneos_info_list" }, null, "/");
+                        });
+                    }
+                    function mostrarPT() {
+                        var url = localStorage.getItem("number");
+                        if (url != '11')
+                        {
+                            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                            $.get("{% url 'arranque_torneo' %}", function(data) {
+                                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                                $("#contenido-dinamico").html(data);
+                                $("#contenido-a-eliminar").hide();
+                                history.pushState({ view: "torneos_play" }, null, "/");
+                            });
+                        }
+                        
+                    }
+                    function mostrarTA() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_admin' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                            history.pushState({ view: "torneos_admin" }, null, "/"); 
+				// history.pushState({ view: "torneos_admin" }, null, "/");
+                        });
+                    }
+
+			function mostrarLogout2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'logout' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            window.location.href = "{% url 'index' %}";
+                            //$("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarQR2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'check' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            //window.location.href = "{% url 'index' %}";
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarPartido2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'arranque_rapido' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarMLista2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'partidos_mlist' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarLista2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'partidos_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarInsLista2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_inscripcion_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarInfLista2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_info_list' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarPT2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'arranque_torneo' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+                    function mostrarTA2() {
+                        // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                        $.get("{% url 'torneos_admin' %}", function(data) {
+                            // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                            $("#contenido-dinamico").html(data);
+                            $("#contenido-a-eliminar").hide();
+                        });
+                    }
+
+                </script>
+            </div>
+        </div>
+        {%if form %}
+            <!--<meta http-equiv="refresh" content="0; url={% url 'index' %}">-->
+        {%endif%}
+        {%if form2 %}
+            <script>
+                window.onload = function() {
+                    mostrarTA();
+                };
+                function mostrarTA() {
+                    // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                    $.get("{% url 'torneos_admin' %}", function(data) {
+                        // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                        $("#contenido-dinamico").html(data);
+                        $("#contenido-a-eliminar").hide();
+                        history.pushState({ view: "torneos_admin" }, null, "/");
+                    });
+                }
+		</script>
+        {%endif%}
+        {% if qr_path%}
+        <script>
+            window.onload = function() {
+                mostrar2fa();
+            };
+            function mostrar2fa() {
+                // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'check' %}", function(data) {
+                    // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                    history.pushState({ view: "check" }, null, "/")
+                });
+            }
+        </script>
+
+        {% endif %}
+        {% if form3 %}
+        <script>
+            window.onload = function() {
+                mostrartorneos();
+            };
+            function mostrartorneos() {
+                // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'torneos_inscripcion_list' %}", function(data) {
+                    // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                    history.pushState({ view: "torneos_inscripcion_list" }, null, "/")
+                });
+            }
+        </script>
+        {% endif %}
+    {% endif %}
+    <script>
+        var username = localStorage.getItem('username2');
+        var form5 = localStorage.getItem('form5');
+        var redirect_url2 = localStorage.getItem('redirect_url');
+        if (form5 || redirect_url2) {
+            window.onload = function() {
+                mostrartorneos2();
+            };
+        }
+        function mostrartorneos2() {
+                localStorage.removeItem('form5');
+                localStorage.removeItem('redirect_url');
+                 // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'torneos_admin' %}", function(data) {
+                     // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                });
+        }
+        if (username) {
+            window.onload = function() {
+                mostrarcode(username);
+            };
+        }
+            function mostrarcode(username) {
+                localStorage.removeItem('username2');
+                // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'google_code' %}?username=" + username, function(data) {
+                    // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                    history.pushState({ view: "google_code" }, null, "/")
+                });
+            }
+        //localStorage.removeItem('username2');
+            function mostrarcode2(username) {
+                // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'google_code' %}?username=" + username, function(data) {
+                    // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                });
+            }
+        </script>
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <span class="mb-3 mb-md-0 text-body-secondary">&copy; 42Madrid excentric pong</span>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+
+    function guardarEstadoHome() {
+            const contenidoDinamico = document.getElementById('contenido-dinamico').innerHTML; // Asegúrate que este ID corresponde al contenedor de tu contenido dinámico
+            const estado = null;
+            localStorage.setItem('miEstado', JSON.stringify(estado));
+        }
+    function guardarEstadoHome2() {
+            const contenidoDinamico = document.getElementById('contenido-dinamico').innerHTML; // Asegúrate que este ID corresponde al contenedor de tu contenido dinámico
+            const estado = null;
+            localStorage.setItem('miEstado', null);
+        }
+    function pushStateFunction() {
+        localStorage.removeItem('number');
+        window.onbeforeunload = guardarEstadoHome();
+        history.pushState({ view: "home" }, null, "/");
+        // history.pushState({ view: "home" }, null, "/");
+    }
+        function limpiarDatosDeSesion() {
+            localStorage.clear();  // Elimina todos los datos de localStorage
+            sessionStorage.clear();  // Elimina todos los datos de sessionStorage
+            // Aquí puedes añadir más limpieza si usas otros métodos de almacenamiento
+        }
+        function mostrarLogin() {
+            limpiarDatosDeSesion();
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'login' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar").hide();
+                history.pushState({ view: "login" }, null, "/");
+
+            });
+        }
+        function mostrarSignup() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'signup' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar").hide();
+                history.pushState({ view: "signup" }, null, "/");
+            });
+        }
+        function mostrarSignup42() {
+            limpiarDatosDeSesion();
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            localStorage.setItem("hostname", window.location.hostname)
+            window.location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-22fb4fcdf0439caa173afadfabf30acd4f9721420251db03960f190416055657&redirect_uri=https%3A%2F%2F"+window.location.hostname+"%2Fapi2&response_type=code";
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+		// SILENCIO 2 líneas A CONTINUACION PARA EVITAR ERROR SI ENTRAS API Y DAS ATRÁS (parece funcionar igual)
+                // $("#contenido-dinamico").html(data);
+                // $("#contenido-a-eliminar").hide();
+        }
+        function mostrarLogin2() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'login' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar").hide();
+            });
+        }
+        function mostrarSignup2() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'signup' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar").hide();
+            });
+        }
+
+                function mostrarTA2() {
+                    // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                    $.get("{% url 'torneos_admin' %}", function(data) {
+                        // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                        $("#contenido-dinamico").html(data);
+                        $("#contenido-a-eliminar").hide();
+                    });
+                }
+                function mostrar2fa2() {
+                // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                $.get("{% url 'check' %}", function(data) {
+                    // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                    $("#contenido-dinamico").html(data);
+                    $("#contenido-a-eliminar").hide();
+                });
+            }
+
+            // function mostrartorneos2() {
+            //     // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            //     $.get("{% url 'torneos_inscripcion_list' %}", function(data) {
+            //         // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+            //         $("#contenido-dinamico").html(data);
+            //         $("#contenido-a-eliminar").hide();
+            //     });
+            // }
+
+</script>
+    {% if request.user.is_authenticated %}
+<script>
+	
+function renderView(view) {
+  // Carga la plantilla index.html
+  $.get(`{% url 'index' %}`, function(data) {
+
+    // Mostrar el contenido específico de la vista
+    switch (view) {
+      /*case "login":
+        mostrarLogin2();
+        break;
+      case "signup":
+        mostrarSignup2();
+        break;*/
+      case "logout":
+	localStorage.setItem('number', '4');
+        mostrarLogout2();
+        break;
+      case "check":
+        localStorage.setItem('number', '5');
+        mostrarQR2();
+        break;
+      case "partido":
+	    localStorage.setItem('number', '6');
+        mostrarPartido2();
+        break;
+      case "partidos_mlist":
+        localStorage.setItem('number', '7');
+        mostrarMLista2();
+        break;
+      case "partidos_list":
+        localStorage.setItem('number', '8');
+        mostrarLista2();
+        break;
+      case "torneos_inscripcion_list":
+        localStorage.setItem('number', '9');
+        mostrarInsLista2();
+        break;
+      case "torneos_info_list":
+        localStorage.setItem('number', '10');
+        mostrarInfLista2();
+        break;
+      case "torneos_play":
+	    localStorage.setItem('number', '11');
+        mostrarPT2();
+        break;
+      case "torneos_admin":
+        localStorage.setItem('number', '12');
+        mostrarTA2();
+        break;
+      case "google_code":
+        mostrarcode2('{{username2}}');
+        break;
+      case "home":
+        localStorage.setItem('number', '1');
+      // $("#contenido-dinamico").html();
+        window.onbeforeunload = guardarEstadoHome();
+        location.reload();
+        break;
+      default:
+        // $("#")
+        break;
+    }
+    // history.pushState({ view: view }, null, `/${view}`);
+  });
+}
+window.addEventListener('popstate', (event) => {
+
+  // Check if event.state has a view property (use strict comparison)
+   if (event.state !== null && typeof event.state.view === 'string') {
+        const view = event.state.view;
+        renderView(view);
+    }
+
+});
+
+//AQUI ES POSIBLE HACER ALGO ANTES DEL REFRESH; pero probablemente te va a dar igual porque cargamos index puro...
+//window.addEventListener('beforeunload', (event) => {
+    // Cancela el evento de descarga para mostrar un mensaje personalizado
+    // event.preventDefault();
+
+    // Realiza la acción deseada en lugar de recargar la página
+    // Por ejemplo, redirige a otra página
+    // const view = event.state.view;
+    // window.location.href = "https://localhost" + renderView(view);
+
+    // No es necesario recargar la página después de la redirección, ya que el navegador manejará la nueva URL automáticamente
+//});
+
+</script>
+{% endif %}
+<script>
+    var done = 0;
+    $(document).ready(function() {
+        $("#alias-form").on("submit", function(e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+            var url = $(this).find("[data-url]").data("url");
+
+            $.ajax({
+    type: "POST",
+    url: url,
+    data: formData,
+    success: function(data) {
+        if (data.success) {
+            // Update alias on the page (if new_alias is returned)
+            if (data.new_alias) {
+                $("#alias").val(data.new_alias);
+            }
+            // Show success message
+            if (data.new_alias == "") {
+                alert("{% trans 'Alias eliminated ' %}");
+            }
+            else {
+                alert("{% trans 'Updated alias: ' %}" + data.new_alias);
+            }  
+        } else {
+            // Show error message
+            alert("{% trans 'Alias not valid ' %}");
+        }
+    },
+    error: function(xhr, status, error) {
+        alert("{% trans 'Error updating alias ' %}");
+    }
+});
+        });
+    });
+    $(document).on("click", ".edit-torneo-btn2", function() {
+            var torneoId = $(this).data("torneo-id");
+            var user = $(this).data("user-id");
+            if (done == 0)
+                editT2(torneoId, user);
+                done = 0;
+        });
+
+        function editT2(torneoId, user) {
+            $.ajax({
+                url: "{% url 'torneos_inscripcion' %}?idTorneo=" + torneoId + '&idUser=' + user,
+                method: "GET",
+                success: function(data) {
+                    $("#contenido-dinamico").html(data.form_html);
+                    $("#contenido-a-eliminar4").hide();
+                }
+            });
+        }
+</script>
+	<script>
+        $(document).on("click", ".edit-torneo-btn3", function() {
+            var torneoId = $(this).data("torneo-id");
+            editT(torneoId);
+        });
+
+        function editT(torneoId) {
+            $.ajax({
+                url: "{% url 'torneos_edit' %}?idTorneo=" + torneoId,
+                method: "GET",
+                success: function(data) {
+                    $("#contenido-dinamico").html(data.form_html);
+                    $("#contenido-a-eliminar4").hide();
+                }
+            });
+        }
+        $(document).on("click", "#edit-torneo-btn", function() {
+            newT();
+        });
+        function newT() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'torneos_edit' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar4").hide();
+            });
+        }
+        $(document).on("click", ".delete-torneo-btn", function() {
+            var torneoId = $(this).data("torneo-id");
+            deleteT(torneoId);
+        });
+
+        function deleteT(torneoId) {
+            $.ajax({
+                url: "{% url 'torneos_delete' %}?idTorneo=" + torneoId,
+                method: "GET",
+                success: function(data) {
+                    // Aquí estableces el HTML devuelto en el contenedor deseado
+                    $("#contenido-dinamico").html(data.html);
+                    if (data.redirect_url) {
+                        localStorage.setItem('redirect_url', data.redirect_url2);
+                        window.location.href = data.redirect_url;
+                    }
+                    $("#contenido-a-eliminar4").hide();
+                },
+                error: function(xhr, status, error) {
+                    // Maneja errores si es necesario
+                }
+            });
+        }
+    </script>
+	 <script>
+    function torneosA() {
+            // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+            $.get("{% url 'torneos_admin' %}", function(data) {
+                // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                $("#contenido-dinamico").html(data);
+                $("#contenido-a-eliminar5").hide();
+            });
+        }
+// </script>
+<script>
+    $(document).ready(function() {
+        $('#miFormulario').submit(function(event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
+            var formData = $(this).serialize(); // Serializar los datos del formulario
+            $.post("{% url 'torneos_edit' %}", formData)
+                .done(function(response) {
+                    // Manejar la respuesta exitosa
+                    if (response.error) {
+                        // Si hay un error, muestra un mensaje de error en algún lugar del HTML
+                        $('#mensajeError').text("{% trans 'An error occurred while processing the form.  ' %}");
+                    } else if (response.redirect_url) {
+                        // Si hay una URL de redirección, redirige a esa URL
+                        localStorage.setItem('form5', response.form5_data);
+                        window.location.href = response.redirect_url;
+                    } else {
+                        // Manejar otro tipo de respuesta, si es necesario
+                        console.log(response);
+                    }
+                })
+                .fail(function(xhr, errmsg, err) {
+                    // Manejar el fallo de la solicitud
+                    console.error("{% trans 'The request failed with an error ' %}" + xhr.status + ': ' + xhr.responseText);
+                });
+        });
+    });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

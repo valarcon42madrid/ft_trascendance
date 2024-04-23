@@ -1,0 +1,11 @@
+docker build -t solidity-dev .
+
+docker run -d -p 8545:8545 solidity-dev
+
+docker exec -it <containerid> truffle compile --all
+
+docker exec -it <containerid> truffle test
+
+docker exec -it <containerid> truffle migrate
+
+docker exec -it <containerid> truffle test

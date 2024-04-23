@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    {% load i18n %}
+<head>
+    <meta charset="UTF-8"/>
+    <!--<link rel="stylesheet" href="static/base.css">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/base.css">
+
+    <!-- href="static/base.css"/>-->
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Configuración de Google Authenticator</title>
+</head>
+<body>
+    <h2>Configuración de Google Authenticator</h2>
+    <p>Sigue los siguientes pasos para configurar Google Authenticator:</p>
+    <ol>
+        <li>Descarga e instala la aplicación Google Authenticator en tu dispositivo móvil desde la App Store (iOS) o Google Play Store (Android).</li>
+        <li>Abre la aplicación Google Authenticator.</li>
+        <li>Escanea el siguiente código QR con la aplicación Google Authenticator:</li>
+        <img src="{{qr_path}}" alt="Google Authenticator QR Code">
+        <li>Una vez escaneado, la aplicación generará un código de verificación. Introduce este código".</li>
+    </ol>
+    <a href="{% url 'home' %}" class="btn btn-primary links" onclick="pushStateFunction()">{% trans "Home" %}</a>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	{% load i18n %}
+<head>
+    <meta charset="UTF-8"/>
+	<!--<link rel="stylesheet" href="static/base.css">-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../../static/base.css">
+
+	<!-- href="static/base.css"/>-->
+	<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Entrar con Google Authenticator</title>
+</head>
+<body>
+    <form action="{% url 'setup_google_authenticator' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="{{username}}">
+        <label for="verification_code">Código de Verificación:</label><br>
+        <input type="text" id="verification_code" name="verification_code"><br>
+        <button type="submit" class="btn btn-primary links">Enviar Código</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,156 @@
+version: '3.8'
+# networks:
+#   monitoring:
+#     driver: bridge
+#   services:
+#     driver: bridge
+
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  postgres_data:
+
+services:
+
+  web:
+    build: ./mysite
+    container_name: django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./mysite/:/usr/src/mysite/
+    ports:
+        - "8000:80"
+    env_file:
+      - ./.env.dev
+    # depends_on:
+    #   - db
+    # networks:
+    #   - services
+    restart: unless-stopped
+
+  db:
+    image: postgres:15.1
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./postgres.env.dev
+    # networks:
+    #   - services
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - 443:443
+      - 80:80
+      - 8080:8080
+    # networks:
+    #   - services
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    env_file:
+      - ./pgadmin.env.dev
+    # networks:
+    #   - services
+    restart: unless-stopped
+
+##### monitoring #######
+
+  #collect and stores data
+  prometheus:
+    # image: prom/prometheus:v2.37.9
+    image: prom/prometheus:v2.51.1
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    user: "1000:1000"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    volumes:
+      - ./configPrometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - ./configPrometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml:ro
+      - ./dataPrometheus:/prometheus
+    # networks:
+    #   - monitoring
+    restart: unless-stopped
+
+  #dashboard
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana-data:/var/lib/grafana
+    # networks:
+    #   - monitoring
+    restart: unless-stopped
+
+  #os level metrics
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    container_name: node_exporter
+    command: '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys/:ro
+    # networks:
+    #   - monitoring
+
+  #container monitoring
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    command:
+      - '-port=8098'
+    volumes:
+      - /:/rootfs:ro
+      # - /var/run:/var/run:rw
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    ports:
+      - "8098:8098"
+    privileged: true
+    # networks:
+    #   - monitoring
+    restart: unless-stopped
+
+  #nginx monitoring
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.1.0
+    container_name: nginx-exporter
+    ports:
+      - "9113:9113"
+    command: --nginx.scrape-uri=http://nginx:8080/stub_status
+    # networks:
+    #   - monitoring
+    restart: unless-stopped
+  
+  #postgres monitoring
+  postgres_exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres_exporter
+    env_file:
+      - ./postgres-exporter.env.dev
+    ports:
+      - "9187:9187"
+    # networks:
+    #   - monitoring
+    restart: unless-stopped

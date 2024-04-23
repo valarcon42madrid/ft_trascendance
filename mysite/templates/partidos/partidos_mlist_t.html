@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="static/partidos.css"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+
+<h1>{% trans "List of my matches" %}</h1>
+
+
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>{% trans "Player 1" %}</th>
+                    <th>{% trans "Score player 1" %}</th>
+                    <th>{% trans "Player 2" %}</th>
+                    <th>{% trans "Score player 2" %}</th>
+                    <th>{% trans "Beginning" %}</th>
+                    <!-- <th>{% trans "Ending" %}</th> -->
+                    <th>{% trans "Duration" %}</th>
+                </tr>
+            </thead>
+                {% for partido in partidos %}
+                <thead class="thead-dark">
+                    <tr>
+                        <td>{{ partido.jugador1.username }}</td>
+                        <td>{{ partido.jugador1_marcador }}</td>
+                        <td>{{ partido.jugador2.username }}</td>
+                        <td>{{ partido.jugador2_marcador }}</td>
+                        <td>{{ partido.comienzo }}</td>
+                        <!-- <td>{{ partido.fin }}</td> -->
+                        <td>{{ partido.duracion }}</td>
+                    </tr>
+                </thead>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+<a href="{% url 'home' %}" class="btn btn-primary links" onclick="pushStateFunction()">{% trans "Home" %}</a>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="static/torneos.css"/>
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div id="contenido-dinamico">
+    </div>
+    <style>
+        .first-column {
+            background-color: #2a2a2a;
+            color: #ffc107;;
+        }
+        .first-column th {
+            background-color: #2a2a2a;
+            color: #ffc107;;
+        }
+    </style>
+    <div id="contenido-a-eliminar5" class="container mt-5">
+        <h1>{% trans "Edit tournement" %}</h1>
+        <form id="miFormulario">
+            {% csrf_token %}
+            <input type='hidden' name='idTorneo' value='{{idTorneo}}'/>
+            <table class="table">
+                {% for field in form %}
+                <tr>
+                    <th class="first-column">{{ field.label_tag }}</th>
+                    <td>{{ field }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p><button type="submit" class="btn btn-primary links"><i class="bi bi-save"></i> {% trans "Save" %}</button></p>
+            <p><a href="#" onclick="torneosA()" class="btn btn-primary links">{% trans "Tournament administration" %}</a></p>
+        </form>
+        
+    </div>
+<script>
+    $(document).ready(function() {
+        $('#miFormulario').submit(function(event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
+            var formData = $(this).serialize(); // Serializar los datos del formulario
+            $.post("{% url 'torneos_edit' %}", formData)
+                .done(function(response) {
+                    // Manejar la respuesta exitosa
+                    if (response.error) {
+                        // Si hay un error, muestra un mensaje de error en algún lugar del HTML
+                        $('#mensajeError').text("{% trans 'An error occurred while processing the form.  ' %}");
+                    } else if (response.redirect_url) {
+                        // Si hay una URL de redirección, redirige a esa URL
+                        localStorage.setItem('form5', response.form5_data);
+                        window.location.href = response.redirect_url;
+                    } else {
+                        // Manejar otro tipo de respuesta, si es necesario
+                        console.log(response);
+                    }
+                })
+                .fail(function(xhr, errmsg, err) {
+                    // Manejar el fallo de la solicitud
+                    console.error("{% trans 'The request failed with an error ' %}" + xhr.status + ': ' + xhr.responseText);
+                });
+        });
+    });
+    </script>
+</body>
+</html>

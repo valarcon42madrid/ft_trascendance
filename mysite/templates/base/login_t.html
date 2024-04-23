@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+{% load i18n %}
+<head>
+<meta charset="UTF-8"/>
+<!--<link rel="stylesheet" href="static/base.css"/>-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../../static/base.css">
+<link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+   <!-- PRIMARY CONTENT SECTION -->
+        <!-- en esta seccion se abren diferentes divs para albergar todas las páginas del sitio
+             en un site mono página -->
+  <main>
+
+<div id="home" class="page">
+    <div class="container">
+        <h1>{% trans "Welcome!" %} {% trans "Login" %}</h1>
+        <!--<h1>{% trans "Login" %}</h1>-->
+        <form id="miFormulario">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_username" class="form-label">{% trans "Username" %}</label>
+                <input type="text" class="form-control" id="id_username" name="username">
+            </div>
+            <div class="mb-3">
+                <label for="id_password" class="form-label">{% trans "Password" %}</label>
+                <input type="password" class="form-control" id="id_password" name="password">
+            </div>
+            <div class="button-group">
+                <p>
+                    <button type="submit" class="btn btn-primary links">
+                        <i class="bi bi-person"></i> {% trans "Login" %}
+                    </button>
+                </p>
+                <p>
+                    <button type="reset" class="btn btn-primary links">
+                        <i class="bi bi-x-circle"></i> {% trans "Clear" %}
+                    </button>
+                </p>
+            </div>
+        </form>
+        <script>
+        $(document).ready(function() {
+    $('#miFormulario').submit(function(event) {
+        event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
+        var formData = $(this).serialize(); // Serializar los datos del formulario
+        $.post("{% url 'login' %}", formData)
+            .done(function(response) {
+                // Manejar la respuesta exitosa
+                if (response.error) {
+                    // Si hay un error, muestra un mensaje de error en algún lugar del HTML
+                    $('#mensajeError').text("{% trans 'An error occurred while processing the form.  ' %}");
+                } else if (response.redirect_url) {
+                    localStorage.setItem('username2', response.username2);
+                    // Si hay una URL de redirección, redirige a esa URL
+                    window.location.href = response.redirect_url;
+                    pushStateFunction();
+                } else {
+                    // Manejar otro tipo de respuesta, si es necesario
+                    console.log(response);
+                }
+            })
+            .fail(function(xhr, errmsg, err) {
+                // Manejar el fallo de la solicitud // Obtener el mensaje de error relevante
+                $('#mensajeError').text("{% trans 'Log in error or wrong password ' %}"); // Mostrar el mensaje de error al usuario
+            });
+    });
+});
+
+        </script>
+        <div id="contenido-dinamico">
+            
+        </div>
+        <!-- todavia no estamos dados de alta en la bbdd -->
+        <div id="contenido-a-eliminar3">
+            <p>
+                <a href="#" onclick="mostrarSignup()" class="btn btn-primary links">
+                    <i class="bi bi-person-plus"></i> {% trans "I haven't signed up yet" %}
+                </a>
+            </p>
+        </div>
+        <div id="mensajeError" style="color: red;"></div>
+        <script>
+          function mostrarSignup() {
+                  // Realiza una solicitud AJAX para obtener el contenido del formulario de inicio de sesión desde el servidor
+                  $.get("{% url 'signup' %}", function(data) {
+                      
+                      // Inserta el contenido del formulario de inicio de sesión dentro de un contenedor en la página
+                      $("#contenido-dinamico").html(data);
+                      $("#contenido-a-eliminar3").hide();
+                  });
+          }
+      </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </div>
+</div>
+</main>
+</body>
+</html>
